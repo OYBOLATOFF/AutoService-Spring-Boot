@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/scripts/jquery-3.6.3.min.js"></script>
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/reviews.css">
+    <title>Отзывы</title>
+
+    <link rel="stylesheet" href="/styles/toast.min.css">
+    <script src="/scripts/toast.min.js"></script>
+</head>
+<body>
+<h3 class="mentioning">
+    След: добавить страницу личного кабинета и условие для кнопки "Личный кабинет" в хедере
+    <br>
+    1) Если человек авторизован, то всплывает окошко с выбором: он либо выходит из аккаунта, либо входит в кабинет
+    <br>
+    2) Если человек не авторизован, то всплывает окно для входа
+</h3>
+
+<div id="login_popup" class="popup">
+    <div class="popup_bg"></div>
+    <div class="popup_content">
+        <div class="popup__logo">
+            <div class="navigation__logo">
+                <i></i>
+                BurningTire
+            </div>
+            <div class="login_popup__close close_popup"></div>
+        </div>
+        <form th:action="@{/try_to_login}" method="post" class="login_popup__form">
+            <h1>Авторизация</h1>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Ваш логин
+                </div>
+                <input type="text" name="username" placeholder="Логин">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Пароль
+                </div>
+                <input type="password" name="password" placeholder="Пароль">
+            </div>
+            <button type="submit" id="login_btn" class="button_1">Войти</button>
+            <h2 id="login_error" style="color: red; font-weight:bold" th:if="${param.error}"
+                th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">Не удалось войти в аккаунт</h2>
+            <h2 id="registration_success" style="color: greenyellow; font-weight:bold"></h2>
+            <p>Нет аккаунта? <a id="open_registration_popup_link">Зарегистрировать!</a></p>
+        </form>
+    </div>
+</div>
+<div id="registration_popup" class="popup">
+    <div class="popup_bg"></div>
+    <div class="popup_content">
+        <div class="popup__logo">
+            <div class="navigation__logo">
+                <i></i>
+                BurningTire
+            </div>
+            <div class="login_popup__close close_popup"></div>
+        </div>
+        <form method="post" class="registration_popup__form">
+            <h1>Регистрация</h1>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Ваш логин
+                </div>
+                <input type="text" id="reg_login_input" name="username" placeholder="Логин">
+                <div id="username_warn" class="input_1__warn">
+                    <!-- Слишком короткое имя -->
+                </div>
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Пароль
+                </div>
+                <input type="password" id="reg_password_input" name="password" placeholder="Пароль">
+                <div id="password_warn" class="input_1__warn">
+                    <!-- Пароли должны быть одинаковые -->
+                </div>
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Подтвердите пароль
+                </div>
+                <input type="password" id="reg_confirmed_password_input" name="confirmedPassword"
+                       placeholder="Подтвердите пароль">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Дата рождения
+                </div>
+                <input type="date" id="reg_birthday_input" name="birthDay">
+            </div>
+            <button type="button" id="registration_btn" class="button_1">Регистрация</button>
+            <h2 id="registration_error" style="color: red; font-weight:bold"></h2>
+            <p>Есть аккаунт? <a id="open_login_popup_link">Войти!</a></p>
+        </form>
+    </div>
+</div>
+<div th:replace="patterns :: basket_popup_fragment"></div>
+<div th:replace="patterns :: navigation_for_scroll_fragment"></div>
+<div th:replace="patterns :: about_project_popup_fragment"></div>
+
+<div class="wrapper">
+    <div class="header">
+        <div class="navigation" style="visibility: hidden">
+            <div class="_container">
+                <div class="navigation__logo">
+                    <i></i>
+                    BurningTire
+                </div>
+                <div class="navigation__menu menu">
+                    <div class="menu__link">
+                        <a>О проекте</a>
+                    </div>
+                    <div class="menu__link">
+                        <a>Каталог</a>
+                    </div>
+                    <div class="menu__link">
+                        <a>Отзывы</a>
+                    </div>
+                    <div class="menu__link">
+                        <a popup-id="login_popup"
+                           th:if="${#authentication.getName().equals('anonymousUser')}">Корзина</a>
+                        <a popup-id="basket_popup" th:if="${!#authentication.getName().equals('anonymousUser')}"
+                           class="basket_popup_link">Корзина</a>
+                    </div>
+                    <div class="menu__link">
+                        <a popup-id="login_popup" th:if="${#authentication.getName().equals('anonymousUser')}">Личный
+                            кабинет</a>
+                        <a th:href="@{/cabinet}" th:if="${!#authentication.getName().equals('anonymousUser')}">Личный
+                            кабинет</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header_text">
+            <div class="_container">
+                <h1>Отзывы на «Автосервис»</h1><br>
+                <h2>
+                    Чтобы оставить отзыв, не обязательно быть авторизованным - любой желающий это может сделать
+                    <br><br>
+                    Отзывы никаким образом не фильтруются и не редактируются извне. Мы за честность и прозрачность!
+                </h2>
+            </div>
+        </div>
+        <div class="header__button _container">
+            <a th:href="@{/}">Главная страница</a>
+        </div>
+    </div>
+    <div class="content">
+        <form class="feedback">
+            <div class="_container">
+                <div class="feedback_content">
+                    <div class="feedback_title">
+                        <h1>Оставьте свой отзыв</h1>
+                    </div>
+                    <div class="feeback_form_element">
+                        <input type="text" id="feedback_author" placeholder="Представьтесь">
+                    </div>
+                    <div class="feeback_form_element">
+                        <textarea class="style-1"  type="text" id="feedback_content" placeholder="Текст сообщения"></textarea>
+                    </div>
+                    <div class="feeback_form_element">
+                        <span style="color: #1a1a1a; font-size: 18px; padding: 0;">Ваша оценка</span>
+                        <select id="feedback_rate">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5" selected>5</option>
+                        </select>
+                    </div>
+                    <button type="button" id="feedback_btn" class="button_1">Оставить отзыв</button>
+                </div>
+            </div>
+        </form>
+        <div class="reviews_catalog">
+            <div class="reviews_content _container">
+            </div>
+        </div>
+    </div>
+    <div class="footer"></div>
+</div>
+<script src="/scripts/script.js"></script>
+<script src="/scripts/reviews.js"></script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/scripts/jquery-3.6.3.min.js"></script>
+  <link rel="stylesheet" href="/styles/style.css">
+  <title>Главная страница</title>
+</head>
+<body>
+
+<h3 class="mentioning">
+  След: добавить страницу личного кабинета и условие для кнопки "Личный кабинет" в хедере
+  <br>
+  1) Если человек авторизован, то всплывает окошко с выбором: он либо выходит из аккаунта, либо входит в кабинет
+  <br>
+  2) Если человек не авторизован, то всплывает окно для входа
+</h3>
+
+<div id="login_popup" class="popup">
+  <div class="popup_bg"></div>
+  <div class="popup_content">
+    <div class="login_popup__logo">
+      <div class="navigation__logo">
+        <i></i>
+        BurningTire
+      </div>
+      <div class="login_popup__close close_popup"></div>
+    </div>
+    <form th:action="@{/try_to_login}" method="post" class="login_popup__form">
+      <h1>Авторизация</h1>
+      <div class="input_1">
+        <div class="input_1__placeholder">
+          Ваш логин
+        </div>
+        <input type="text" name="username" placeholder="Логин">
+      </div>
+      <div class="input_1">
+        <div class="input_1__placeholder">
+          Пароль
+        </div>
+        <input type="password" name="password" placeholder="Пароль">
+      </div>
+      <button type="submit" id="login_btn" class="button_1">Войти</button>
+      <h2 id="login_error" style="color: red; font-weight:bold" th:if="${param.error}" th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">Не удалось войти в аккаунт</h2>
+      <h2 id="registration_success" style="color: greenyellow; font-weight:bold"></h2>
+      <p>Нет аккаунта? <a id="open_registration_popup_link">Зарегистрировать!</a></p>
+    </form>
+  </div>
+</div>
+<div id="registration_popup" class="popup">
+  <div class="popup_bg"></div>
+  <div class="popup_content">
+    <div class="login_popup__logo">
+      <div class="navigation__logo">
+        <i></i>
+        BurningTire
+      </div>
+      <div class="login_popup__close close_popup"></div>
+    </div>
+    <form method="post" class="registration_popup__form">
+      <h1>Регистрация</h1>
+      <div class="input_1">
+        <div class="input_1__placeholder">
+          Ваш логин
+        </div>
+        <input type="text" id="reg_login_input" name="username" placeholder="Логин">
+        <div id="username_warn" class="input_1__warn">
+          <!-- Слишком короткое имя -->
+        </div>
+      </div>
+      <div class="input_1">
+        <div class="input_1__placeholder">
+          Пароль
+        </div>
+        <input type="password" id="reg_password_input" name="password" placeholder="Пароль">
+        <div id="password_warn" class="input_1__warn">
+          <!-- Пароли должны быть одинаковые -->
+        </div>
+      </div>
+      <div class="input_1">
+        <div class="input_1__placeholder">
+          Подтвердите пароль
+        </div>
+        <input type="password" id="reg_confirmed_password_input" name="confirmedPassword" placeholder="Подтвердите пароль">
+      </div>
+      <div class="input_1">
+        <div class="input_1__placeholder">
+          Дата рождения
+        </div>
+        <input type="date" id="reg_birthday_input" name="birthDay">
+      </div>
+      <button type="button" id="registration_btn" class="button_1">Регистрация</button>
+      <h2 id="registration_error" style="color: red; font-weight:bold"></h2>
+      <p>Есть аккаунт? <a id="open_login_popup_link">Войти!</a></p>
+    </form>
+  </div>
+</div>
+<div class="wrapper">
+  <div class="header">
+    <div class="navigation">
+      <div class="_container">
+        <div class="navigation__logo">
+          <i></i>
+          BurningTire
+        </div>
+        <div class="navigation__menu menu">
+          <a class="menu__link">О проекте</a>
+          <a class="menu__link">Каталог</a>
+          <a class="menu__link">Отзывы</a>
+          <a class="menu__link">Корзина</a>
+          <a th:href="@{/cabinet}" class="menu__link" th:if="${!#authentication.getName().equals('anonymousUser')}">Личный кабинет</a>
+          <a popup-id="login_popup" class="menu__link" th:if="${#authentication.getName().equals('anonymousUser')}">Личный кабинет</a>
+        </div>
+      </div>
+    </div>
+    <div class="header_text">
+      <div class="_container">
+        <h1>Приложение «Автосервис»</h1><br>
+        <h2>
+          Добро пожаловать в наш экспертный автосервис! В BurningTire мы заботимся о том, чтобы ваш автомобиль работал как можно лучше. Мы понимаем, что проблемы с автомобилем могут быть досадными и неудобными, поэтому мы здесь, чтобы помочь.
+          <br><br>
+          В BurningTire мы верим в исключительное обслуживание клиентов. Мы понимаем, что каждый клиент имеет уникальные потребности, поэтому мы уделяем время тому, чтобы выслушать вас и общаться с вами на каждом этапе работы. Мы хотим, чтобы вы чувствовали себя уверенно и были удовлетворены услугами, которые мы предоставляем.
+        </h2>
+      </div>
+    </div>
+    <div class="header__cabinet_button _container">
+      <a popup-id="login_popup" href="#" th:if="${#authentication.getName().equals('anonymousUser')}">Личный кабинет</a>
+      <a th:href="@{/cabinet}" th:if="${!#authentication.getName().equals('anonymousUser')}">Личный кабинет</a>
+    </div>
+  </div>
+  <div class="content">
+    <div class="masters_catalog">
+      <div class="_container">
+        <div class="catalog_title">
+          <h1>Наша команда специалистов</h1>
+        </div>
+        <div class="specialists">
+          <div class="specialist" th:each="specialistObj: ${specialistList}">
+            <div class="specialist-image">
+              <img src="https://www.car72.ru/images/news/7151.jpeg" alt="Specialist Image">
+            </div>
+            <div class="specialist-info">
+              <h3 class="specialist-name" th:text="|${specialistObj.getFirstName()} ${specialistObj.getLastName()}|">John Doe</h3>
+              <p class="specialist-specialty" th:text="${specialistObj.getSpecialization()}">Engine Specialist</p>
+              <p class="specialist-experience" th:text="|Стаж работы: ${specialistObj.getWorkExperience()}|">10 years of experience</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="footer"></div>
+</div>
+<script src="/scripts/script.js"></script>
+</body>
+</html>

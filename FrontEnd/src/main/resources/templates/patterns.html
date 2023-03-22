@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="basket_popup" class="popup" th:fragment="basket_popup_fragment">
+  <info th:value="${#authentication.getName()}" th:if="${!#authentication.getName().equals('anonymousUser')}" style="display: none"></info>
+  <div class="popup_bg"></div>
+  <div class="popup_content">
+    <div class="popup__logo">
+      <div class="navigation__logo">
+        <i></i>
+        BurningTire
+      </div>
+      <div class="login_popup__close close_popup"></div>
+    </div>
+    <div class="basket_content">
+      <br><h1 th:text="|Корзина ${#authentication.getName()}|"></h1>
+      <div class="basket__items">
+      </div>
+      <br><h1 class="basket__total_cost">Общая сумма: 2450$</h1>
+    </div>
+    <br>
+  </div>
+</div>
+<div class="navigation navigation_for_scroll" th:fragment="navigation_for_scroll_fragment">
+  <div class="_container">
+    <div class="navigation__logo">
+      <i></i>
+      BurningTire
+    </div>
+    <div class="navigation__menu menu">
+      <div class="menu__link">
+        <a popup-id="about_project_popup">О проекте</a>
+      </div>
+      <div class="menu__link">
+        <a>Каталог</a>
+      </div>
+      <div class="menu__link">
+        <a th:href="@{/reviews}">Отзывы</a>
+      </div>
+      <div class="menu__link">
+        <a popup-id="login_popup" th:if="${#authentication.getName().equals('anonymousUser')}">Корзина</a>
+        <a popup-id="basket_popup" th:if="${!#authentication.getName().equals('anonymousUser')}" class="basket_popup_link">Корзина</a>
+      </div>
+      <div class="menu__link">
+        <a popup-id="login_popup" th:if="${#authentication.getName().equals('anonymousUser')}">Личный кабинет</a>
+        <a th:href="@{/cabinet}" th:if="${!#authentication.getName().equals('anonymousUser')}">Личный кабинет</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="about_project_popup" class="popup" th:fragment="about_project_popup_fragment">
+  <div class="popup_bg"></div>
+  <div class="popup_content">
+    <div class="popup__logo">
+      <div class="navigation__logo">
+        <i></i>
+        BurningTire
+      </div>
+      <div class="login_popup__close close_popup"></div>
+    </div>
+    <div class="about_project__description">
+      <br>
+      <h1 style="font-size: 40px; font-family: GothamProBold">О проекте BurningTire</h1><br>
+      <h2 style="font-family: GothamProBold">Автор: Рамазан Ойболатов</h2>
+      <hr>
+      <h2>
+        Проект написан в рамках курсовой работы за 2-й курс направления «Прикладная информатика»<br><br>
+        В написании автосервиса использовался следующий перечень технологий:
+        <ul>
+          <li>Java, Spring Boot, Spring Data JPA, Spring Security, Spring WEB, Hibernate, Thymeleaf</li>
+          <li>MySQL</li>
+          <li>HTML, CSS, JavaScript/JQuery</li>
+          <li>Технология AJAX запросов для отзывчивого поведения</li>
+        </ul>
+        <br>Любой желающий здесь может зарегистрироваться и собрать свою корзину из услуг<br>
+      </h2>
+      <hr>
+      <br>
+      <h1 style="font-size: 35px; font-family: GothamProBold">REST Инструкция</h1><br>
+      <h2>
+        Для манипуляций с данными написан специальный REST сервис. Инструкция по его использованию ниже:
+        <br><br>
+
+        <span style="color: deepskyblue; margin-bottom: 10px; display: inline-block; font-family: GothamProBold">Мастера</span>
+        <ul>
+          <li>GET /api/specialists: Получить список всех мастеров</li>
+          <hr>
+          <li>POST /api/specialists: Добавить мастера <br> Параметры: <span style="color: deepskyblue">firstName, lastName, specializationId, workExperience</span> </li>
+          <hr>
+          <li>DELETE /api/specialists: Удалить мастера <br> Параметры: <span style="color: deepskyblue">specialistId (ID мастера)</span></li>
+          <hr>
+          <li>PUT /api/specialists: Изменить информацию о мастере <br> Параметры: <span style="color: deepskyblue">id(ID мастера), firstName (новое имя), lastName (новая фамилия), specializationId (новая специализация), workExperience (новый опыт работы)</span></li>
+        </ul>
+        <br><br>
+
+        <span style="color: deepskyblue; margin-bottom: 10px; display: inline-block; font-family: GothamProBold">Услуги</span>
+        <ul>
+          <li>GET /api/services: Получить список всех услуг автосервиса</li>
+          <hr>
+          <li>POST /api/services: Добавить услугу <br> Параметры: <span style="color: deepskyblue">title (название), description (описание), priceWithoutDiscount (цена без скидки), priceWithDiscount ([необяз] цена со скидкой)</span> </li>
+          <hr>
+          <li>DELETE /api/services: Удалить услугу <br> Параметры: <span style="color: deepskyblue">serviceId (ID услуги)</span></li>
+          <hr>
+          <li>PUT /api/services: Изменить информацию о мастере <br> Параметры: <span style="color: deepskyblue">id (ID услуги), title (название), description (описание), priceWithoutDiscount (цена без скидки), priceWithDiscount ([необяз] цена со скидкой)</span></li>
+        </ul>
+
+        <br><br>
+        <span style="color: deepskyblue; margin-bottom: 10px; display: inline-block; font-family: GothamProBold">Корзина</span>
+        <ul>
+          <li>GET /api/basket: Получить корзину пользователя <br> Параметры: <span style="color: deepskyblue">userId (ID или никнейм пользователя)</span></li>
+          <hr>
+          <li>POST /api/basket: Добавить услугу в корзину пользователя <br> Параметры: <span style="color: deepskyblue">username (ник пользователя), serviceTitle (название услуги)</span> </li>
+          <hr>
+          <li>DELETE /api/basket: Удалить услугу из корзины <br> Параметры: <span style="color: deepskyblue">username (ник пользователя), serviceTitle (название услуги)</span></li>
+          <hr>
+          <li>PUT /api/basket: Изменить кол-во услуги в корзине <br> Параметры: <span style="color: deepskyblue">username (ник пользователя), serviceTitle (название услуги), amount (количество)</span></li>
+        </ul>
+      </h2>
+      <hr>
+      <h1 style="font-size: 35px; font-family: GothamProBold; text-align: center">Схема базы данных проекта</h1><br>
+      <img style="margin: 0 auto; display: block" src="/images/other/JavaCourseWorkDbScheme.jpg" alt="Схема базы данных">
+    </div>
+  </div>
+</div>
+</body>
+</html>

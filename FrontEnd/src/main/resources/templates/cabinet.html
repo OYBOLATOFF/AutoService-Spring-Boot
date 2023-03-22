@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="|Личный кабинет ${user.getUsername()}|">Личный кабинет</title>
+    <script src="/scripts/jquery-3.6.3.min.js"></script>
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/cabinet.css">
+</head>
+<body>
+<div th:replace="patterns :: basket_popup_fragment"></div>
+<div th:replace="patterns :: about_project_popup_fragment"></div>
+<div class="wrapper">
+    <div class="header">
+        <div class="navigation">
+            <div class="_container">
+                <div class="navigation__logo">
+                    <i></i>
+                    BurningTire
+                </div>
+                <div class="navigation__menu menu">
+                    <div class="menu__link">
+                        <a popup-id="about_project_popup">О проекте</a>
+                    </div>
+                    <div class="menu__link">
+                        <a>Каталог</a>
+                    </div>
+                    <div class="menu__link">
+                        <a>Отзывы</a>
+                    </div>
+                    <div class="menu__link">
+                        <a popup-id="basket_popup" class="basket_popup_link">Корзина</a>
+                    </div>
+                    <div class="menu__link">
+                        <a th:href="@{/}">Главная</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header_text">
+            <div class="_container">
+                <h1 th:text="|Добро пожаловать, ${user.getUsername()}|">Добро пожаловать</h1><br>
+                <h2>
+                    В BurningTire мы заботимся о том, чтобы ваш автомобиль работал как можно лучше. Мы понимаем, что проблемы с автомобилем могут быть досадными и неудобными, поэтому мы здесь, чтобы помочь.
+                    <br><br>
+                    В BurningTire мы верим в исключительное обслуживание клиентов. Мы понимаем, что каждый клиент имеет уникальные потребности, поэтому мы уделяем время тому, чтобы выслушать вас и общаться с вами на каждом этапе работы. Мы хотим, чтобы вы чувствовали себя уверенно и были удовлетворены услугами, которые мы предоставляем.
+                </h2>
+            </div>
+        </div>
+        <div class="header__button _container">
+            <a th:href="@{/logout}">Покинуть личный кабинет</a>
+            <a th:href="@{/admin}" th:if="${user.isAdmin()}">Админ панель</a>
+        </div>
+    </div>
+    <div class="content"></div>
+    <div class="footer"></div>
+</div>
+<script src="/scripts/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/scripts/jquery-3.6.3.min.js"></script>
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/admin.css">
+    <title>Главная страница</title>
+</head>
+<body>
+
+<h3 class="mentioning">
+    След: добавить страницу личного кабинета и условие для кнопки "Личный кабинет" в хедере
+    <br>
+    1) Если человек авторизован, то всплывает окошко с выбором: он либо выходит из аккаунта, либо входит в кабинет
+    <br>
+    2) Если человек не авторизован, то всплывает окно для входа
+</h3>
+
+<div id="login_popup" class="popup">
+    <div class="popup_bg"></div>
+    <div class="popup_content">
+        <div class="popup__logo">
+            <div class="navigation__logo">
+                <i></i>
+                BurningTire
+            </div>
+            <div class="login_popup__close close_popup"></div>
+        </div>
+        <form th:action="@{/try_to_login}" method="post" class="login_popup__form">
+            <h1>Авторизация</h1>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Ваш логин
+                </div>
+                <input type="text" name="username" placeholder="Логин">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Пароль
+                </div>
+                <input type="password" name="password" placeholder="Пароль">
+            </div>
+            <button type="submit" id="login_btn" class="button_1">Войти</button>
+            <h2 id="login_error" style="color: red; font-weight:bold" th:if="${param.error}"
+                th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">Не удалось войти в аккаунт</h2>
+            <h2 id="registration_success" style="color: greenyellow; font-weight:bold"></h2>
+            <p>Нет аккаунта? <a id="open_registration_popup_link">Зарегистрировать!</a></p>
+        </form>
+    </div>
+</div>
+<div id="master_popup" class="popup">
+    <div class="popup_bg"></div>
+    <div class="popup_content">
+        <div class="popup__logo">
+            <div class="navigation__logo">
+                <i></i>
+                BurningTire
+            </div>
+            <div class="login_popup__close close_popup"></div>
+        </div>
+        <form method="post" class="registration_popup__form">
+            <h1>Информация о мастере</h1>
+            <div class="master_photo" onclick="document.getElementById('selectMasterImage').click()">
+                <img id="master_photo" src="/images/other/default_avatar.png" alt="Фотография мастера">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Имя мастера
+                </div>
+                <input type="text" id="master_first_name_input" value="John" name="username" placeholder="Имя мастера">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Фамилия мастера
+                </div>
+                <input type="text" id="master_last_name_input" name="password" value="Doe" placeholder="Фамилия мастера">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Специализация мастера
+                </div>
+                <select name="" id="master_specialization_input">
+                    <option value="Замена масла">Замена масла</option>
+                    <option value="Диагностика автомобиля">Диагностика автомобиля</option>
+                    <option value="Балансировка колёс">Балансировка колёс</option>
+                    <option value="Замена катализатора">Замена катализатора</option>
+                </select>
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Стаж работы
+                </div>
+                <input type="number" min="0" id="master_experience_input" name="birthDay" value="10">
+            </div>
+<!--            <div id="master_popup_warn" class="input_1__warn"></div>-->
+            <div class="master_remote">
+                <button type="button" id="master_change_info_btn" class="button_1">Изменить</button>
+                <button type="button" id="master_delete_btn" class="button_1">Удалить мастера</button>
+            </div>
+
+            <h2 id="master_info_error" class="notification"></h2>
+        </form>
+    </div>
+</div>
+<div id="add_master_popup" class="popup">
+    <div class="popup_bg"></div>
+    <div class="popup_content">
+        <div class="popup__logo">
+            <div class="navigation__logo">
+                <i></i>
+                BurningTire
+            </div>
+            <div class="login_popup__close close_popup"></div>
+        </div>
+        <form method="post" class="registration_popup__form">
+            <h1>Добавление мастера</h1>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Имя мастера
+                </div>
+                <input type="text" id="add_master_first_name_input" value="John" name="username" placeholder="Имя мастера">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Фамилия мастера
+                </div>
+                <input type="text" id="add_master_last_name_input" name="password" value="Doe" placeholder="Фамилия мастера">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Специализация мастера
+                </div>
+                <select name="" id="add_master_specialization_input">
+                    <option value="Замена масла">Замена масла</option>
+                    <option value="Диагностика автомобиля">Диагностика автомобиля</option>
+                    <option value="Балансировка колёс">Балансировка колёс</option>
+                    <option value="Замена катализатора">Замена катализатора</option>
+                </select>
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Стаж работы
+                </div>
+                <input type="number" min="0" id="add_master_experience_input" name="birthDay" value="10">
+            </div>
+            <div class="master_remote">
+                <button type="button" id="add_master_btn" class="button_1">Добавить мастера</button>
+            </div>
+
+            <h2 id="add_master_info_error" class="notification"></h2>
+        </form>
+    </div>
+</div>
+<div id="service_popup" class="popup">
+    <div class="popup_bg"></div>
+    <div class="popup_content">
+        <div class="popup__logo">
+            <div class="navigation__logo">
+                <i></i>
+                BurningTire
+            </div>
+            <div class="login_popup__close close_popup"></div>
+        </div>
+        <form method="post" class="registration_popup__form">
+            <h1>Информация об услуге</h1>
+            <div class="service_photo" onclick="document.getElementById('selectServiceImage').click()">
+                <img id="service_photo" src="/images/other/default_avatar.png" alt="Фотография услуги">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Название услуги
+                </div>
+                <input type="text" id="service_title_input" value="John" name="username" placeholder="Название услуги">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Описание услуги
+                </div>
+                <input type="text" id="service_description_input" name="password" value="Doe" placeholder="Описание услуги">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Цена без скидки
+                </div>
+                <input type="number" min="0" id="service_price_without_discount_input" name="birthDay" value="10">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Цена со скидкой
+                </div>
+                <input type="number" min="0" id="service_price_with_discount_input" name="birthDay" value="10">
+            </div>
+            <div class="master_remote">
+                <button type="button" id="service_change_info_btn" class="button_1">Изменить</button>
+                <button type="button" id="service_delete_btn" class="button_1">Удалить услугу</button>
+            </div>
+
+            <h2 id="service_info_error" class="notification"></h2>
+        </form>
+    </div>
+</div>
+<div id="add_service_popup" class="popup">
+    <div class="popup_bg"></div>
+    <div class="popup_content">
+        <div class="popup__logo">
+            <div class="navigation__logo">
+                <i></i>
+                BurningTire
+            </div>
+            <div class="login_popup__close close_popup"></div>
+        </div>
+        <form method="post" class="registration_popup__form">
+            <h1>Добавление услуги</h1>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Название услуги
+                </div>
+                <input type="text" id="add_service_title_input" name="username" placeholder="Название услуги">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Описание услуги
+                </div>
+                <input type="text" id="add_service_description_input" name="password" placeholder="Описание услуги">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Цена без скидки
+                </div>
+                <input type="number" min="0" id="add_service_price_without_discount_input" placeholder="Цена без скидки" name="birthDay">
+            </div>
+            <div class="input_1">
+                <div class="input_1__placeholder">
+                    Цена со скидкой
+                </div>
+                <input type="number" min="0" id="add_service_price_with_discount_input" placeholder="Цена со скидкой" name="birthDay">
+            </div>
+            <div class="master_remote">
+                <button type="button" id="add_service_btn" class="button_1">Добавить услугу</button>
+            </div>
+
+            <h2 id="add_service_info_error" class="notification"></h2>
+        </form>
+    </div>
+</div>
+<div th:replace="patterns :: basket_popup_fragment"></div>
+<div th:replace="patterns :: navigation_for_scroll_fragment"></div>
+<div th:replace="patterns :: about_project_popup_fragment"></div>
+
+<div class="wrapper">
+    <div class="header">
+        <div class="navigation" style="visibility: hidden">
+            <div class="_container">
+                <div class="navigation__logo">
+                    <i></i>
+                    BurningTire
+                </div>
+                <div class="navigation__menu menu">
+                    <div class="menu__link">
+                        <a>О проекте</a>
+                    </div>
+                    <div class="menu__link">
+                        <a>Каталог</a>
+                    </div>
+                    <div class="menu__link">
+                        <a>Отзывы</a>
+                    </div>
+                    <div class="menu__link">
+                        <a popup-id="basket_popup" class="basket_popup_link">Корзина</a>
+                    </div>
+                    <div class="menu__link">
+                        <a th:href="@{/}">Главная</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header_text">
+            <div class="_container">
+                <h1 th:text="|Админ-панель ${user.getUsername()}|"></h1><br>
+                <h2>
+                    Здесь ты можешь управлять мастерами автосервиса и услугами
+                </h2>
+            </div>
+        </div>
+        <div class="header__button _container">
+            <a th:href="@{/cabinet}">Личный кабинет</a>
+            <a th:href="@{/}">Главная страница</a>
+        </div>
+    </div>
+    <div class="content">
+        <div class="specialists">
+            <div class="_container">
+                <div class="table_header_and_remote">
+                    <h1>Таблица мастеров</h1>
+                    <div class="specialists_remote remote">
+                        <button id="add_master_button" class="add_button" type="button">Добавить</button>
+                        <input id="master_selection_fullname" type="text" placeholder="Полное имя">
+                        <select id="master_selection_work_experience_select">
+                            <option value=">">Выше</option>
+                            <option value="<">Ниже</option>
+                            <option value="=" selected>Равно</option>
+                        </select>
+                        <input id="master_selection_work_experience" type="number" placeholder="Опыт работы">
+                        <select id="master_selection_specialization">
+                            <option value="all" selected>Все специализации</option>
+                        </select>
+                        <i class="refresh_masters_table_icon refresh_table_icon"></i>
+                    </div>
+                </div>
+                <table border="2px">
+                    <thead>
+                        <tr>
+                            <td>Имя</td>
+                            <td>Фамилия</td>
+                            <td>Специализация</td>
+                            <td>Опыт работы</td>
+                        </tr>
+                    </thead>
+                    <tbody id="specialists_tbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="services">
+            <div class="_container">
+                <div class="table_header_and_remote">
+                    <h1>Таблица услуг</h1>
+                    <div class="services_remote remote">
+                        <button id="add_service_button" class="add_button" type="button">Добавить</button>
+                        <input id="service_selection_title" type="text" placeholder="Название услуги">
+                        <select id="service_selection_price_select">
+                            <option value=">">Выше</option>
+                            <option value="<">Ниже</option>
+                            <option value="=" selected>Равно</option>
+                        </select>
+                        <input id="service_selection_price" type="number" placeholder="Цена услуги">
+                        <i class="refresh_services_table_icon refresh_table_icon"></i>
+                    </div>
+                </div>
+                <table border="2px">
+                    <thead>
+                    <tr>
+                        <td>Название</td>
+                        <td>Описание</td>
+                        <td>Цена без скидки</td>
+                        <td>Цена со скидкой</td>
+                    </tr>
+                    </thead>
+                    <tbody id="services_tbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <form id="changeMasterAvatarForm" enctype="multipart/form-data" action="http://localhost:8081/api/changeMasterAvatar" method="post" style="display: none">
+            <input type="file" id="selectMasterImage" name="imageFile">
+            <button type="submit" id="changeMasterAvatarButton">Отправить</button>
+        </form>
+        <form id="changeServiceAvatarForm" enctype="multipart/form-data" th:action="http://localhost:8081/api/changeMasterAvatar" method="post" style="display: none">
+            <input type="file" id="selectServiceImage" name="imageFile">
+            <button type="submit" id="changeServiceAvatarButton">Отправить</button>
+        </form>
+    </div>
+    <div class="footer"></div>
+</div>
+<script src="/scripts/script.js"></script>
+<script src="/scripts/adminPageScript.js"></script>
+</body>
+</html>

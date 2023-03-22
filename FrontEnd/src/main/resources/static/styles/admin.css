@@ -1,0 +1,156 @@
+.specialists {
+    background: none;
+    backdrop-filter: none;
+}
+
+.specialists ._container {
+    width: 75%;
+    margin: 3em auto;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.specialists h1, .services h1 {
+    color: black;
+}
+
+.registration_popup__form {
+    padding-bottom: 1em;
+}
+
+tr {
+    transition: .1s ease-in-out;
+    cursor: pointer;
+}
+
+td {
+    padding: 0.3em 0;
+    font-size: 18px;
+    text-align: center;
+    color: black;
+}
+
+.specialist_row:hover, .service_row:hover {
+    background-color: #1a1a1a;
+}
+
+.specialist_row:hover *, .service_row:hover * {
+    color: white;
+}
+
+thead {
+    background-color: #1a1a1a;
+}
+
+thead, tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;/* even columns width , fix width of table too*/
+}
+
+tbody {
+    display: block;
+    max-height: 350px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+thead > tr > td {
+    color: white;
+    font-weight: bold;
+    font-size: 23px;
+}
+
+@keyframes notification_color_blink {
+    0% {
+        color: white;
+    }
+
+    50% {
+        color: red;
+    }
+
+    100% {
+        color: white;
+    }
+}
+
+.notification {
+    transition: .3s ease-in-out;
+    opacity: 0;
+    margin-top: 10px;
+}
+
+.notification.notification_success, .notification.notification_error {
+    opacity: 1;
+}
+
+.notification.notification_success {
+    color: greenyellow;
+}
+
+.notification.notification_error {
+    color: red;
+    animation: notification_color_blink .4s ease-in-out infinite;
+}
+
+.content {
+    background: no-repeat center/cover url("../images/content/adminPageBackground.jpg");
+    padding-bottom: 5em;
+}
+
+.service-card {
+    background-color: white;
+    border: 2px double black;
+}
+
+.remote {
+    display: flex;
+    justify-content: space-between;
+}
+
+.remote * {
+    padding: 0.5em;
+    font-size: 17px;
+    color: white;
+    margin-right: 15px;
+    border: 0px;
+    background: #1a1a1a;
+}
+
+.remote *:last-child {
+    margin-right: 0;
+}
+
+.table_header_and_remote {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/*i {*/
+/*    display: block;*/
+/*    width: 40px;*/
+/*    height: 40px;*/
+/*    background-color: red;*/
+/*    align-self: center;*/
+/*    transition: .3s ease-in-out;*/
+/*}*/
+
+.refresh_masters_table_icon, .refresh_services_table_icon {
+    background: no-repeat center/cover url("../images/other/refresh_table__black.svg");
+}
+
+.refresh_table_icon:hover {
+    transform: rotate(180deg);
+}
+
+.add_button {
+    cursor: pointer;
+    background-color: #149600;
+    color: black;
+}
